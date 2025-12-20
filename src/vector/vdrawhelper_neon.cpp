@@ -1,6 +1,8 @@
-#if defined(__ARM_NEON__)
-
 #include "vdrawhelper.h"
+
+// Disable NEON assembly optimizations on Apple platforms (arm64/aarch64)
+// as the assembly file uses 32-bit ARM syntax which doesn't compile on macOS
+#if defined(__ARM_NEON__) && !defined(__APPLE__)
 
 extern "C" void pixman_composite_src_n_8888_asm_neon(int32_t w, int32_t h,
                                                      uint32_t *dst,
@@ -30,4 +32,22 @@ void RenderFuncTable::neon()
 {
     updateColor(BlendMode::Src , color_SourceOver);
 }
+
+#elif defined(__ARM_NEON__) && defined(__APPLE__)
+
+// Provide stub implementation on Apple arm64 - falls back to generic C++ code
+void memfill32(uint32_t *dest, uint32_t value, int length)
+{
+    // Let compiler do auto-vectorization with NEON
+    for (int i = 0; i < length; i++) {
+        *dest++ = value;
+    }
+}
+
+void RenderFuncTable::neon()
+{
+    // No assembly optimizations on Apple platforms
+    // Use the default C++ implementations
+}
+
 #endif

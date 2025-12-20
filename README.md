@@ -80,6 +80,30 @@ To install rlottie library
 make install
 ```
 
+#### macOS Silicon (Apple M1/M2/M3) Support
+
+This fork includes support for macOS on Apple Silicon (arm64/aarch64). The original NEON assembly optimizations are disabled on macOS as they use 32-bit ARM syntax incompatible with arm64. The library falls back to standard C++ implementations with compiler auto-vectorization.
+
+To build on macOS Silicon:
+```bash
+mkdir build
+cd build
+cmake .. \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_SHARED_LIBS=OFF \
+    -DLOTTIE_MODULE=OFF \
+    -DLOTTIE_TEST=OFF \
+    -DCMAKE_INSTALL_PREFIX=/usr/local \
+    -DLIB_INSTALL_DIR=/usr/local/lib
+make -j$(sysctl -n hw.ncpu)
+sudo make install
+```
+
+The library will be installed to:
+- Headers: `/usr/local/include/`
+- Library: `/usr/local/lib/librlottie.a`
+- pkg-config: `/usr/local/lib/pkgconfig/rlottie.pc`
+
 ### Test
 
 Configure to build test

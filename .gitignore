@@ -6,6 +6,8 @@ build
 html
 latex
 *.swp
+*.bak
+*.bak[0-9]
 tmp
 .cproject
 .project
