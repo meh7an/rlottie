@@ -137,25 +137,25 @@ static char *zip_strrpl(const char *str, size_t n, char oldchar, char newchar) {
   return begin;
 }
 
-static int zip_archive_truncate(mz_zip_archive *pzip) {
-  mz_zip_internal_state *pState = pzip->m_pState;
-  mz_uint64 file_size = pzip->m_archive_size;
-  if ((pzip->m_pWrite == mz_zip_heap_write_func) && (pState->m_pMem)) {
-    return 0;
-  }
-  if (pzip->m_zip_mode == MZ_ZIP_MODE_WRITING_HAS_BEEN_FINALIZED) {
-    if (pState->m_pFile) {
-      int fd = fileno(pState->m_pFile);
-      return ftruncate(fd, file_size);
-    }
-  }
-  return 0;
-}
+// static int zip_archive_truncate(mz_zip_archive *pzip) {
+//   mz_zip_internal_state *pState = pzip->m_pState;
+//   mz_uint64 file_size = pzip->m_archive_size;
+//   if ((pzip->m_pWrite == mz_zip_heap_write_func) && (pState->m_pMem)) {
+//     return 0;
+//   }
+//   if (pzip->m_zip_mode == MZ_ZIP_MODE_WRITING_HAS_BEEN_FINALIZED) {
+//     if (pState->m_pFile) {
+//       int fd = fileno(pState->m_pFile);
+//       return ftruncate(fd, file_size);
+//     }
+//   }
+//   return 0;
+// }
 
-static inline void zip_archive_finalize(mz_zip_archive *pzip) {
-  mz_zip_writer_finalize_archive(pzip);
-  zip_archive_truncate(pzip);
-}
+// static inline void zip_archive_finalize(mz_zip_archive *pzip) {
+//   mz_zip_writer_finalize_archive(pzip);
+//   zip_archive_truncate(pzip);
+// }
 
 int zip_entry_openbyindex(struct zip_t *zip, size_t index) {
   mz_zip_archive *pZip = NULL;

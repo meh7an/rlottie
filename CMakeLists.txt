@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.15)
 
 #declare project
 project( rlottie VERSION 0.2 LANGUAGES C CXX ASM)
@@ -109,7 +109,7 @@ if (NOT LOTTIE_ASAN)
     if(APPLE)
         target_link_libraries(rlottie
                             PUBLIC
-                                 "-Wl, -undefined error"
+                                 "-Wl"
                               )
     elseif(NOT MSVC)
         target_link_libraries(rlottie
