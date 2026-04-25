@@ -433,8 +433,18 @@ void Animation::setValue(Point_Type, Property prop, const std::string &keypath,
     d->setValue(keypath, LOTVariant(prop, value));
 }
 
-Animation::~Animation() = default;
-Animation::Animation() : d(std::make_unique<AnimationImpl>()) {}
+Animation::~Animation() { delete d; }
+Animation::Animation() : d(new AnimationImpl()) {}
+Animation::Animation(Animation&& other) noexcept : d(other.d) { other.d = nullptr; }
+Animation& Animation::operator=(Animation&& other) noexcept
+{
+    if (this != &other) {
+        delete d;
+        d = other.d;
+        other.d = nullptr;
+    }
+    return *this;
+}
 
 Surface::Surface(uint32_t *buffer, size_t width, size_t height,
                  size_t bytesPerLine)

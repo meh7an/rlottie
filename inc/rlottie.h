@@ -505,8 +505,13 @@ private:
      *  @internal
      */
     Animation();
+    Animation(const Animation&)            = delete;
+    Animation& operator=(const Animation&) = delete;
 
-    std::unique_ptr<AnimationImpl> d;
+    Animation(Animation&&) noexcept;
+    Animation& operator=(Animation&&) noexcept;
+
+    AnimationImpl *d{nullptr};
 };
 
 //Map Property to Value type
@@ -522,6 +527,6 @@ template<> struct MapType<std::integral_constant<Property, Property::TrPosition>
 template<> struct MapType<std::integral_constant<Property, Property::TrScale>>: Size_Type{};
 template<> struct MapType<std::integral_constant<Property, Property::TrimStart>>: Float_Type{};
 template<> struct MapType<std::integral_constant<Property, Property::TrimEnd>>: Point_Type{};
-}  // namespace lotplayer
+}  // namespace rlottie
 
 #endif  // _RLOTTIE_H_

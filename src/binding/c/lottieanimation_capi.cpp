@@ -234,7 +234,8 @@ lottie_animation_property_override(Lottie_Animation_S *animation,
         double g = v[1];
         double b = v[2];
         if (r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0) break;
-        animation->mAnimation->setValue<rlottie::Property::FillColor>(keypath, rlottie::Color(r, g, b));
+        animation->mAnimation->setValue<rlottie::Property::FillColor>(
+            keypath, rlottie::Color(static_cast<float>(r), static_cast<float>(g), static_cast<float>(b)));
         break;
     }
     case LOTTIE_ANIMATION_PROPERTY_FILLOPACITY: {
@@ -248,7 +249,8 @@ lottie_animation_property_override(Lottie_Animation_S *animation,
         double g = v[1];
         double b = v[2];
         if (r > 1 || r < 0 || g > 1 || g < 0 || b > 1 || b < 0) break;
-        animation->mAnimation->setValue<rlottie::Property::StrokeColor>(keypath, rlottie::Color(r, g, b));
+        animation->mAnimation->setValue<rlottie::Property::StrokeColor>(
+            keypath, rlottie::Color(static_cast<float>(r), static_cast<float>(g), static_cast<float>(b)));
         break;
     }
     case LOTTIE_ANIMATION_PROPERTY_STROKEOPACITY: {
@@ -314,7 +316,11 @@ lottie_animation_get_markerlist(Lottie_Animation_S *animation)
    animation->mMarkerList->ptr = new LOTMarker[markers.size()]();
 
    for(size_t i = 0; i < markers.size(); i++) {
-       animation->mMarkerList->ptr[i].name = strdup(std::get<0>(markers[i]).c_str());
+      #if defined(_MSC_VER)
+       animation->mMarkerList->ptr[i].name = _strdup(std::get<0>(markers[i]).c_str());
+        #else
+            animation->mMarkerList->ptr[i].name = strdup(std::get<0>(markers[i]).c_str());
+        #endif
        animation->mMarkerList->ptr[i].startframe= std::get<1>(markers[i]);
        animation->mMarkerList->ptr[i].endframe= std::get<2>(markers[i]);
    }

@@ -586,7 +586,7 @@ bool VMatrix::fuzzyCompare(const VMatrix &o) const
             if (t == MatrixType::Project) {              \
                 float w = (m13 * FX_ + m23 * FY_ + m33); \
                 if (w < V_NEAR_CLIP) w = V_NEAR_CLIP;    \
-                w = 1. / w;                              \
+                w = 1.f / w;                              \
                 nx *= w;                                 \
                 ny *= w;                                 \
             }                                            \
@@ -616,22 +616,22 @@ VRect VMatrix::map(const VRect &rect) const
     } else if (t < MatrixType::Project) {
         // see mapToPolygon for explanations of the algorithm.
         float x = 0, y = 0;
-        MAP(rect.left(), rect.top(), x, y);
+        MAP(static_cast<float>(rect.left()), static_cast<float>(rect.top()), x, y);
         float xmin = x;
         float ymin = y;
         float xmax = x;
         float ymax = y;
-        MAP(rect.right() + 1, rect.top(), x, y);
+        MAP(static_cast<float>(rect.right() + 1), static_cast<float>(rect.top()), x, y);
         xmin = vMin(xmin, x);
         ymin = vMin(ymin, y);
         xmax = vMax(xmax, x);
         ymax = vMax(ymax, y);
-        MAP(rect.right() + 1, rect.bottom() + 1, x, y);
+        MAP(static_cast<float>(rect.right() + 1), static_cast<float>(rect.bottom() + 1), x, y);
         xmin = vMin(xmin, x);
         ymin = vMin(ymin, y);
         xmax = vMax(xmax, x);
         ymax = vMax(ymax, y);
-        MAP(rect.left(), rect.bottom() + 1, x, y);
+        MAP(static_cast<float>(rect.left()), static_cast<float>(rect.bottom() + 1), x, y);
         xmin = vMin(xmin, x);
         ymin = vMin(ymin, y);
         xmax = vMax(xmax, x);

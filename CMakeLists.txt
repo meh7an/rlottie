@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.15)
 
 #declare project
-project( rlottie VERSION 0.2 LANGUAGES C CXX ASM)
+project( rlottie VERSION 0.2 LANGUAGES C CXX)
 
 if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE MinSizeRel)
@@ -52,7 +52,7 @@ if(MSVC)
                         PUBLIC
                         PRIVATE
                             /std:c++14
-                            /EHs-c- # disable exceptions
+                            /EHsc # disable exceptions
                             /GR- # disable RTTI
                             /W3
                         )

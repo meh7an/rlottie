@@ -594,10 +594,10 @@ size_t SpanMerger::merge(VRle::Span *&aPtr, const VRle::Span *aEnd,
     memset(_buffer.data(), 0, length);
 
     // blit a to buffer
-    blitSrc(_aStart, aPtr - _aStart, _buffer.data(), -lb);
+    blitSrc(_aStart, static_cast<int>(aPtr - _aStart), _buffer.data(), -lb);
 
     // blit b to buffer
-    _blitter(_bStart, bPtr - _bStart, _buffer.data(), -lb);
+    _blitter(_bStart, static_cast<int>(bPtr - _bStart), _buffer.data(), -lb);
 
     // convert buffer to span
     return bufferToRle(_buffer.data(), length, lb, y, _result.data());

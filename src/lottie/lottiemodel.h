@@ -480,10 +480,18 @@ public:
             auto len = strlen(name);
             if (len < maxShortStringLength) {
                 setShortString(true);
-                strncpy(mData._buffer, name, len + 1);
+                #if defined(_MSC_VER)
+                    strncpy_s(mData._buffer, len + 1, name, len + 1);
+                #else
+                    strncpy(mData._buffer, name, len + 1);
+                #endif
             } else {
                 setShortString(false);
-                mPtr = strdup(name);
+                #if defined(_MSC_VER)
+                    mPtr = _strdup(name);
+                #else
+                    mPtr = strdup(name);
+                #endif
             }
         }
     }

@@ -680,7 +680,7 @@ void LottieParserImpl::parseComposition()
         } else if (0 == strcmp(key, "op")) {
             comp->mEndFrame = std::lround(GetDouble());
         } else if (0 == strcmp(key, "fr")) {
-            comp->mFrameRate = GetDouble();
+            comp->mFrameRate = static_cast<float>(GetDouble());
         } else if (0 == strcmp(key, "assets")) {
             parseAssets(comp);
         } else if (0 == strcmp(key, "layers")) {
@@ -725,9 +725,9 @@ void LottieParserImpl::parseMarker()
         if (0 == strcmp(key, "cm")) {
             comment = GetStringObject();
         } else if (0 == strcmp(key, "tm")) {
-            timeframe = GetDouble();
+            timeframe = static_cast<int>(GetDouble());
         } else if (0 == strcmp(key, "dr")) {
-            duration = GetDouble();
+            duration = static_cast<int>(GetDouble());
 
         } else {
 #ifdef DEBUG_PARSER
@@ -1104,7 +1104,7 @@ model::Layer *LottieParserImpl::parseLayer()
             layer->mHasGradient = true;
             mLayersToUpdate.push_back(layer);
         } else if (0 == strcmp(key, "sr")) {  // "Layer Time Stretching"
-            layer->mTimeStreatch = GetDouble();
+            layer->mTimeStreatch = static_cast<float>(GetDouble());
         } else if (0 == strcmp(key, "tm")) {  // time remapping
             parseProperty(layer->extra()->mTimeRemap);
         } else if (0 == strcmp(key, "ip")) {
@@ -1112,7 +1112,7 @@ model::Layer *LottieParserImpl::parseLayer()
         } else if (0 == strcmp(key, "op")) {
             layer->mOutFrame = std::lround(GetDouble());
         } else if (0 == strcmp(key, "st")) {
-            layer->mStartFrame = GetDouble();
+            layer->mStartFrame = std::lround(GetDouble());
         } else if (0 == strcmp(key, "bm")) {
             layer->mBlendMode = getBlendMode();
         } else if (0 == strcmp(key, "ks")) {
@@ -1813,7 +1813,7 @@ model::Stroke *LottieParserImpl::parseStrokeObject()
         } else if (0 == strcmp(key, "lj")) {
             obj->mJoinStyle = getLineJoin();
         } else if (0 == strcmp(key, "ml")) {
-            obj->mMiterLimit = GetDouble();
+            obj->mMiterLimit = static_cast<float>(GetDouble());
         } else if (0 == strcmp(key, "d")) {
             parseDashProperty(obj->mDash);
         } else if (0 == strcmp(key, "hd")) {
@@ -1922,7 +1922,7 @@ model::GradientStroke *LottieParserImpl::parseGStrokeObject()
         } else if (0 == strcmp(key, "lj")) {
             obj->mJoinStyle = getLineJoin();
         } else if (0 == strcmp(key, "ml")) {
-            obj->mMiterLimit = GetDouble();
+            obj->mMiterLimit = static_cast<float>(GetDouble());
         } else if (0 == strcmp(key, "d")) {
             parseDashProperty(obj->mDash);
         } else {
@@ -1956,7 +1956,7 @@ void LottieParserImpl::getValue(VPointF &pt)
     while (NextArrayValue()) {
         const auto value = GetDouble();
         if (i < 4) {
-            val[i++] = value;
+            val[i++] = static_cast<float>(value);
         }
     }
     pt.setX(val[0]);
@@ -1967,13 +1967,13 @@ void LottieParserImpl::getValue(float &val)
 {
     if (PeekType() == kArrayType) {
         EnterArray();
-        if (NextArrayValue()) val = GetDouble();
+        if (NextArrayValue()) val = static_cast<float>(GetDouble());
         // discard rest
         while (NextArrayValue()) {
             GetDouble();
         }
     } else if (PeekType() == kNumberType) {
-        val = GetDouble();
+        val = static_cast<float>(GetDouble());
     } else {
         Error();
     }
@@ -1988,7 +1988,7 @@ void LottieParserImpl::getValue(model::Color &color)
     while (NextArrayValue()) {
         const auto value = GetDouble();
         if (i < 4) {
-            val[i++] = value;
+            val[i++] = static_cast<float>(value);
         }
     }
 
@@ -2004,7 +2004,7 @@ void LottieParserImpl::getValue(model::Gradient::Data &grad)
     if (PeekType() == kArrayType) EnterArray();
 
     while (NextArrayValue()) {
-        grad.mGradient.push_back(GetDouble());
+        grad.mGradient.push_back(static_cast<float>(GetDouble()));
     }
 }
 
@@ -2141,7 +2141,7 @@ void LottieParserImpl::parseKeyFrame(model::KeyFrames<T, Tag> &obj)
         } else if (0 == strcmp(key, "o")) {
             outTangent = parseInperpolatorPoint();
         } else if (0 == strcmp(key, "t")) {
-            keyframe.start_ = GetDouble();
+            keyframe.start_ = static_cast<float>(GetDouble());
         } else if (0 == strcmp(key, "s")) {
             parsed.value = true;
             getValue(keyframe.value_.start_);

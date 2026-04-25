@@ -284,7 +284,7 @@ public:
     {
         rlottie::FrameInfo info(frame);
         rlottie::Size      sz = data(prop).size()(info);
-        return VSize(sz.w(), sz.h());
+        return VSize(static_cast<int>(sz.w()), static_cast<int>(sz.h()));
     }
     float opacity(rlottie::Property prop, int frame) const
     {
@@ -412,7 +412,7 @@ public:
         VMatrix mS, mR, mT;
         if (this->hasFilter(rlottie::Property::TrScale)) {
             VSize s = this->filter()->scale(rlottie::Property::TrScale, frame);
-            mS.scale(s.width() / 100.0, s.height() / 100.0);
+            mS.scale(static_cast<float>(s.width() / 100.0), static_cast<float>(s.height() / 100.0));
         }
         if (this->hasFilter(rlottie::Property::TrRotation)) {
             mR.rotate(this->filter()->value(rlottie::Property::TrRotation, frame));
